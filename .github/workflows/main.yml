@@ -26,6 +26,11 @@ jobs:
           cache-dependency-path: ./package-lock.json
           node-version: 22.1.0
           cache: npm
+      
+      - name: Environment variables
+        run: |
+          echo "VITE_baseApiUrl=${{ vars.VITE_baseApiUrl }}" >> $GITHUB_ENV
+          echo "VITE_clientUrl=${{ vars.VITE_clientUrl }}" >> $GITHUB_ENV
 
       - name: Install dependencies and build
         working-directory: ./
