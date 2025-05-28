@@ -31,7 +31,7 @@ export const MenuItem = (props: MenuItemProps) => {
           onClick={(event) => {
             event.stopPropagation();
             // props.setMenuItem(props.menuItem);
-            props.handleEditMenuItem();
+            // props.handleEditMenuItem();
             // setShowModal(true);
           }}
           className="z-10 first:pr-4 font-medium text-blue-600 dark:text-blue-500 hover:underline"

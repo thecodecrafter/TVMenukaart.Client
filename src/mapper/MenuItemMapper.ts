@@ -1,7 +1,6 @@
 import { MenuItemDto } from "../client/MenuMaster.Client.Generated";
 import { MenuItemDomainModel } from "../domain/MenuItemDomainModel";
 import { AbstractMapper } from "../utils/AbstractMapper";
-import { getValueOrNull } from "../utils/convert";
 
 export class MenuItemMapper extends AbstractMapper<
   MenuItemDto,
@@ -11,9 +10,9 @@ export class MenuItemMapper extends AbstractMapper<
     const result = new MenuItemDomainModel();
 
     result.id = model.id ?? 0;
-    result.name = getValueOrNull(model.name);
-    result.description = getValueOrNull(model.description);
-    result.price = getValueOrNull(model.price);
+    result.name = model.name ?? "";
+    result.description = model.description ?? "";
+    result.price = model.price ?? 0;
 
     return result;
   }
