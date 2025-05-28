@@ -1,6 +1,3 @@
-tsconfig.app.*
-tsconfig.node.*
-
 dist
 dist-ssr
 *.local
