@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "SF-Pro-Rounded-Variable";
+  src: url("/fonts/SF-Pro-Rounded-Heavy.ttf") format("truetype-variations");
+  font-weight: 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF-Pro-Rounded-Variable";
+  src: url("/fonts/SF-Pro-Rounded-Bold.otf") format("truetype-variations");
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF-Pro-Rounded-Variable";
+  src: url("/fonts/SF-Pro-Rounded-SemiBold.otf") format("truetype-variations");
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF-Pro-Rounded-Variable";
+  src: url("/fonts/SF-Pro-Rounded-Medium.ttf") format("truetype-variations");
+  font-weight: 300;
+  font-display: swap;
+}
+
+body {
+  background-color: #fff;
+  color: #000;
+  @apply font-sfpro text-xs;
+}
+
+h1 {
+  @apply text-4xl font-bold;
+  line-height: 5rem;
+}
+h2 {
+  @apply text-xl;
+}
+h3 {
+  @apply text-lg;
+}
+h4 {
+  @apply text-base font-bold;
+}
+
+h2.category {
+  @apply border-t-[1px] border-b-[1px] inline-block pt-3 pb-3 text-center w-full border-[#000] uppercase mb-4;
+}
+
+h3.category {
+  @apply border-t-[1px] border-b-[1px] inline-block pt-3 pb-3 text-center w-full border-[#000] uppercase mb-5;
+}
+
+a {
+  @apply underline;
+}
+
+.custom-shadow {
+  @apply shadow-[0_4px_4px_0px_rgba(0,0,0,0.15)];
+}
+
+ul.navigationMenu {
+  li {
+    margin-bottom: 2rem;
+    color: #09244b;
+  }
+}
+
+.form-card-input {
+  all: unset;
+}
+
+.form-card-input {
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 2rem;
+  text-align: start;
+  -webkit-transform: translateX(36px);
+  -ms-transform: translateX(36px);
+  transform: translateX(36px);
+  position: absolute;
+  z-index: 3;
+  text-transform: uppercase;
+  background-color: transparent;
+}
