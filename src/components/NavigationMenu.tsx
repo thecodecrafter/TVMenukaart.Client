@@ -2,18 +2,16 @@ import { Link, useNavigate } from "react-router-dom";
 import IconAccount from "../icons/IconAccount";
 import IconLogout from "../icons/IconLogout";
 import IconScreens from "../icons/IconScreens";
-import { useContext } from "react";
-import { Context as AuthContext } from "../context/authContext";
+import { useAuth } from "../context/authContext";
 
 export const NavigationMenu = () => {
-  // const router = useNavigate();
-  const { signout } = useContext(AuthContext);
   const navigate = useNavigate();
-  // const { logout } = useCurrentUserContext();
-  // const handleLogout = () => {
-  //   logout();
-  //   // router("/login");
-  // };
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <div className="px-14 border-r-2 border-[#BDBDBD] p-8 h-full mr-14">
@@ -51,7 +49,7 @@ export const NavigationMenu = () => {
             <IconLogout />
             <h3
               className="font-semibold pl-5 cursor-pointer"
-              onClick={() => signout(navigate)}
+              onClick={handleLogout}
             >
               Uitloggen
             </h3>

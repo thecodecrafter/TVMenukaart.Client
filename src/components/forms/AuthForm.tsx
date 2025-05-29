@@ -26,7 +26,7 @@ export const AuthForm = (props: AuthFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(submit)} noValidate>
+    <form onSubmit={handleSubmit(submit)} noValidate className="login-form">
       <div className="flex flex-col gap-4">
         <label className="input input-bordered flex items-center gap-2">
           <svg

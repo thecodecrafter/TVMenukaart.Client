@@ -1,80 +1,53 @@
-import { NavigateFunction } from "react-router-dom";
+import { createContext, useContext, useState } from "react";
 import { AccountService } from "../service/AccountService";
-import createDataContext from "./createDataContext";
-import { ProblemDetails } from "../client/MenuMaster.Client.Generated";
+import { UserDomainModel } from "../domain/UserDomainModel";
 
-const authReducer = (state, action) => {
-  switch (action.type) {
-    case "add_error":
-      console.log("Setting", action.payload)
-      return { ...state, errorMessage: action.payload };
-    case "signin":
-      return { errorMessage: "", token: action.payload };
-    case "clear_error_message":
-      return { ...state, errorMessage: "" };
-    case "signout":
-      return { token: null, errorMessage: "" };
-    default:
-      return state;
-  }
-};
+interface AuthContextProps {
+  user: UserDomainModel;
+  token: string | null;
+  login: (username, password) => void;
+  logout: () => void;
+}
+const AuthContext = createContext<AuthContextProps | null>(null);
 
-const tryLocalSignin = (dispatch) => async () => {
-  const token = await localStorage.getItemAsync("token");
+export const AuthProvider = ({ children }) => {
+  const accountService = new AccountService(import.meta.env.VITE_baseApiUrl);
+  const [user, setUser] = useState(() =>
+    JSON.parse(localStorage.getItem("user") ?? "{}")
+  );
+  const [token, setToken] = useState(() => localStorage.getItem("token"));
 
-  if (token) {
-    dispatch({ type: "signin", payload: token });
-  } else {
-    // router.replace("/deviceCode");
-  }
-};
+  const login = async (username, password) => {
+    const response = await accountService.login(username, password);
 
-const clearErrorMessage = (dispatch) => () => {
-  dispatch({ type: "clear_error_message" });
-};
+    console.log(response);
+    setUser(response);
+    setToken(response.token);
 
-const signin = (dispatch) => {
-  return async ({ username, password }, navigate: NavigateFunction) => {
-    try {
-      const accountService = new AccountService(
-        import.meta.env.VITE_baseApiUrl
-      );
-
-      const response = await accountService.login(username, password);
-
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("user", JSON.stringify(response));
-      dispatch({
-        type: "signin",
-        payload: response.token,
-      });
-
-      navigate("/admin/restaurants");
-    } catch (err: unknown) {
-      const error = err as ProblemDetails;
-      dispatch({
-        type: "add_error",
-        payload:
-          "Please try again: " + error.title
-      });
-    }
+    localStorage.setItem("user", JSON.stringify(response));
+    localStorage.setItem("token", response.token);
   };
-};
 
-const signout = (dispatch) => {
-  return async (navigate: NavigateFunction) => {
+  const logout = () => {
+    setUser(null);
+    setToken(null);
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    dispatch({
-      type: "signout",
-    });
-
-    navigate("/login");
   };
+
+  return (
+    <AuthContext.Provider value={{ user, token, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
-export const { Provider, Context } = createDataContext(
-  authReducer,
-  { signin, signout, clearErrorMessage, tryLocalSignin },
-  { token: localStorage.getItem("token"), errorMessage: "" }
-);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+
+  return context;
+};
