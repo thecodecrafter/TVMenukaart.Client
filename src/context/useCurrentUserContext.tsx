@@ -28,9 +28,6 @@ export const CurrentUserContextProvider = (props: ICurrentUserContext) => {
     const user = localStorage.getItem("user");
     const token = localStorage.getItem("token");
 
-    console.log("test")
-
-    console.log("usercontext", user, token);
     if (user && token) {
       setUser(JSON.parse(user));
       setToken(token);

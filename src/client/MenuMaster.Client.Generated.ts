@@ -3028,6 +3028,8 @@ export class UserDto implements IUserDto {
     username?: string | null;
     email?: string | null;
     token?: string | null;
+    refreshToken?: string | null;
+    expiresIn?: number;
 
     constructor(data?: IUserDto) {
         if (data) {
@@ -3044,6 +3046,8 @@ export class UserDto implements IUserDto {
             this.username = _data["username"] !== undefined ? _data["username"] : <any>null;
             this.email = _data["email"] !== undefined ? _data["email"] : <any>null;
             this.token = _data["token"] !== undefined ? _data["token"] : <any>null;
+            this.refreshToken = _data["refreshToken"] !== undefined ? _data["refreshToken"] : <any>null;
+            this.expiresIn = _data["expiresIn"] !== undefined ? _data["expiresIn"] : <any>null;
         }
     }
 
@@ -3060,6 +3064,8 @@ export class UserDto implements IUserDto {
         data["username"] = this.username !== undefined ? this.username : <any>null;
         data["email"] = this.email !== undefined ? this.email : <any>null;
         data["token"] = this.token !== undefined ? this.token : <any>null;
+        data["refreshToken"] = this.refreshToken !== undefined ? this.refreshToken : <any>null;
+        data["expiresIn"] = this.expiresIn !== undefined ? this.expiresIn : <any>null;
         return data;
     }
 }
@@ -3069,6 +3075,8 @@ export interface IUserDto {
     username?: string | null;
     email?: string | null;
     token?: string | null;
+    refreshToken?: string | null;
+    expiresIn?: number;
 }
 
 export class ValidationProblemDetails implements IValidationProblemDetails {

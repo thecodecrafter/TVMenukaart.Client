@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import IconAccount from "../icons/IconAccount";
 import IconLogout from "../icons/IconLogout";
 import IconScreens from "../icons/IconScreens";
-import { useAuth } from "../context/authContext";
+import { useAuth } from "../context/AuthContext";
 
 export const NavigationMenu = () => {
   const navigate = useNavigate();

@@ -19,7 +19,6 @@ export class AccountService {
     return this.client
       .login(new LoginDto({ username, password }))
       .then((response) => {
-        console.log("RESPONSE: ", response);
         const user = new UserDomainModel(
           response.id!,
           response.username!,
@@ -27,10 +26,12 @@ export class AccountService {
           response.token!
         );
 
+        user.refreshToken = response.refreshToken!;
+        user.expiresIn = response.expiresIn!;
+
         return Promise.resolve(user);
       })
       .catch((error: ClientApiException) => {
-        console.log("ERROR3: ", error.response);
         return Promise.reject(error);
       });
   };
@@ -51,6 +52,24 @@ export class AccountService {
       })
       .catch((error: ClientApiException) => {
         console.log(error.response);
+        return Promise.reject(error);
+      });
+  };
+
+  refreshToken = (): Promise<UserDomainModel> => {
+    return this.client
+      .refreshToken()
+      .then((response) => {
+        const user = new UserDomainModel(
+          response.id!,
+          response.username!,
+          response.email!,
+          response.token!
+        );
+
+        return Promise.resolve(user);
+      })
+      .catch((error: ClientApiException) => {
         return Promise.reject(error);
       });
   };

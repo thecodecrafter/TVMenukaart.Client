@@ -1,26 +1,35 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { AccountService } from "../service/AccountService";
 import { UserDomainModel } from "../domain/UserDomainModel";
+import { setupInterceptors } from "../service/setupAxiosInterceptors";
 
 interface AuthContextProps {
-  user: UserDomainModel;
+  user: UserDomainModel | null;
   token: string | null;
-  login: (username, password) => void;
+  login: (username, password) => Promise<void>;
   logout: () => void;
+  loading: boolean;
 }
 const AuthContext = createContext<AuthContextProps | null>(null);
 
 export const AuthProvider = ({ children }) => {
   const accountService = new AccountService(import.meta.env.VITE_baseApiUrl);
-  const [user, setUser] = useState(() =>
-    JSON.parse(localStorage.getItem("user") ?? "{}")
-  );
-  const [token, setToken] = useState(() => localStorage.getItem("token"));
+  const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<UserDomainModel | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    setupInterceptors({
+      getToken: () => localStorage.getItem("token"),
+      setToken,
+      setUser,
+      logout,
+    });
+  }, []);
 
   const login = async (username, password) => {
     const response = await accountService.login(username, password);
 
-    console.log(response);
     setUser(response);
     setToken(response.token);
 
@@ -35,8 +44,20 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("user");
   };
 
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
+
+    if (storedToken && storedUser) {
+      setToken(storedToken);
+      setUser(JSON.parse(storedUser));
+    }
+
+    setLoading(false);
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
