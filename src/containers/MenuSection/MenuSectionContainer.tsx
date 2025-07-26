@@ -10,6 +10,7 @@ import { MenuService } from "../../service/MenuService";
 import Connector from "../../signalr-connection";
 import { PopupModal } from "../../components/PopupModal";
 import { Loader } from "../../components/Loader";
+import { MenuItemsService } from "../../service/MenuItemsService";
 // import { MenuItemDomainModel } from "../../domain/MenuItemDomainModel";
 
 type MenuSectionContainerProps = {
@@ -20,7 +21,7 @@ export const MenuSectionContainer = (props: MenuSectionContainerProps) => {
   const apiUrl = useApiEndpointContext();
   const menuSectionService = new MenuSectionsService(apiUrl);
   const menuService = new MenuService(apiUrl);
-  // const menuItemService = new MenuItemsService(apiUrl);
+  const menuItemService = new MenuItemsService(apiUrl);
   const connector = Connector.getInstance();
   const [refreshCounter, setRefreshCounter] = useState(0);
   const [refreshCounterMenu, setRefreshCounterMenu] = useState(0);
@@ -49,6 +50,10 @@ export const MenuSectionContainer = (props: MenuSectionContainerProps) => {
   const handleDeleteMenuSection = (id: number) => {
     return menuSectionService.deleteMenuSection(id);
   };
+
+  const handleDeleteMenuItem = (id: number) => {
+    return menuItemService.menuItemDELETE(id);
+  }
 
   if (menu.isProcessing) {
     return <Loader />;
@@ -119,7 +124,7 @@ export const MenuSectionContainer = (props: MenuSectionContainerProps) => {
       {menu.data?.menuSections?.map((item) => (
         <MenuSection
           menuSection={item}
-          // handleDeleteMenuItem={handleDeleteMenuItem}
+          handleDeleteMenuItem={handleDeleteMenuItem}
           handleDeleteMenuSection={handleDeleteMenuSection}
           key={item.id}
           admin={true}

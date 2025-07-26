@@ -1,5 +1,7 @@
-import { MenuContainer } from "../containers/Menu/MenuContainer";
+import { useParams } from "react-router-dom";
+import { MenusContainer } from "../containers/Menu/MenusContainer";
 
 export const MenusPage = () => {
-  return <MenuContainer />;
+  const { restaurantId } = useParams();
+  return <MenusContainer restaurantId={restaurantId ?? ""} />;
 };

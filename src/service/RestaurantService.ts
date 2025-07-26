@@ -18,6 +18,7 @@ export class RestaurantService {
   GetAllRestaurants = async (): Promise<RestaurantDomainModel[]> => {
     const mapper = new RestaurantMapper();
     const data = await this.client.restaurantAll();
+
     return data.map((item) => mapper.map(item));
   };
 

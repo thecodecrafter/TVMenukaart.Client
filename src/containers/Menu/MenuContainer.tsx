@@ -74,7 +74,7 @@ export const MenuContainer = () => {
           >
             <IconClose width={10} height={10} />
           </button>
-          <a href={`/menus/${item.id}`} className="no-underline">
+          <a href={`menus/${item.id}`} className="no-underline">
             <div
               className={`custom-shadow p-16 hover:cursor-pointer rounded-2xl flex justify-center items-center text-center`}
             >

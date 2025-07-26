@@ -1,9 +1,7 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { ClientHelper } from "../../utils/ClientHelper";
 
 type AuthFormProps = {
-  login: (username: string, password: string) => void;
+  login: (username: string, password: string) => Promise<void>;
 };
 
 type AuthFormSchemaModel = {
@@ -14,15 +12,9 @@ export const AuthForm = (props: AuthFormProps) => {
   const { register, handleSubmit } = useForm<AuthFormSchemaModel>({
     values: { password: "", username: "" },
   });
-  const [error, setError] = useState<string>("");
 
-  const submit = (data: { username: string; password: string }) => {
-    try {
-      props.login(data.username, data.password);
-    } catch (error) {
-      setError(ClientHelper.getErrorMessage(error));
-      console.log("LOGIN", ClientHelper.getErrorMessage(error));
-    }
+  const submit = async (data: { username: string; password: string }) => {
+    await props.login(data.username, data.password);
   };
 
   return (
@@ -68,7 +60,6 @@ export const AuthForm = (props: AuthFormProps) => {
             placeholder="Wachtwoord"
           />
         </label>
-        {error && <span>ERROR</span>}
         <button className="btn btn-primary" type="submit">
           Login
         </button>

@@ -10,7 +10,7 @@ import { MenuItem } from "./MenuItem";
 export type MenuSectionProps = {
   menuSection: MenuSectionDomainModel;
   handleDeleteMenuSection: (menuSectionId: number) => Promise<void>;
-  // handleDeleteMenuItem: (menuItemId: number) => void;
+  handleDeleteMenuItem: (menuItemId: number) => void;
   // handleEditMenuItem: (menuItem: MenuItemDomainModel) => void;
   // setMenuItem: (menuItem: MenuItemDomainModel) => void;
   admin?: boolean;
@@ -88,10 +88,9 @@ export const MenuSection = (props: MenuSectionProps) => {
               return (
                 <MenuItem
                   menuItem={item}
-                  handleDeleteMenuItem={() =>
-                    console.log("handleDeleteMenuItem")
-                  }
-                  key={menuItem?.id}
+                  handleDeleteMenuItem={() => props.handleDeleteMenuItem(item.id)}
+                  handleEditMenuItem={() => console.log("handleEditMenuItem", item?.id)}
+                  key={item?.id}
                 />
 
                 // <MenuItemContainer

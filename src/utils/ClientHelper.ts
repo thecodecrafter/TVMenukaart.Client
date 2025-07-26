@@ -32,6 +32,12 @@ export class ClientHelper implements IClientHelper {
           break;
         }
 
+        case 404: {
+          const result = ClientHelper.getErrorModel<ProblemDetails>(reason);
+          errorMessage = result?.title ?? null;
+          break;
+        }
+
         case 500:
           errorMessage =
             ClientHelper.getErrorModel<ProblemDetails>(reason)?.detail ?? null;
@@ -53,6 +59,7 @@ export class ClientHelper implements IClientHelper {
   };
 
   static getErrorMessage = (reason: unknown): string => {
+    console.log(reason);
     return (
       new ClientHelper().getTechnicalErrorMessage(reason) ??
       "Door een storing kunnen er geen resultaten worden getoond."
