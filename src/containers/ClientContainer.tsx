@@ -51,6 +51,7 @@ export const ClientContainer = (props: ClientContainerProps) => {
           menuSection={item}
           key={key}
           handleDeleteMenuSection={onDeleteMenuSection}
+          handleDeleteMenuItem={() => console.log("handle delete menu item")}
         />
       ))}
     </div>

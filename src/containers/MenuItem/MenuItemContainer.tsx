@@ -38,6 +38,7 @@ export const MenuItemContainer = (props: MenuItemContainerProps) => {
         menuItem={menuItem}
         handleDeleteMenuItem={() => console.log("handleDeleteMenuItem")}
         key={menuItem?.id}
+        handleEditMenuItem={() => console.log("handle edit menu item")}
       />
     </>
   );
