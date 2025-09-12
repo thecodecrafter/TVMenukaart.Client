@@ -1,11 +1,12 @@
-import { useForm } from "react-hook-form";
 import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+
 import { useApiEndpointContext } from "../../context/useApiEndpointContext";
 import { MenuItemDomainModel } from "../../domain/MenuItemDomainModel";
-import { parsePrice } from "../../utils/number";
 import { useClickedOutside } from "../../hooks/useClickedOutside";
 import IconBin from "../../icons/IconBin";
 import { MenuItemsService } from "../../service/MenuItemsService";
+import { parsePrice } from "../../utils/number";
 
 type MenuItemProps = {
   menuSectionId: number;
@@ -31,7 +32,6 @@ export const MenuItemForm = (props: MenuItemProps) => {
     formState: { errors, isDirty, defaultValues },
     reset,
   } = useForm<MenuItemSchemaModel>({
-
     values: props.menuItem
       ? {
           id: props.menuItem.id,
@@ -62,16 +62,16 @@ export const MenuItemForm = (props: MenuItemProps) => {
           props.toggle(false);
           reset();
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     }
   };
-  
+
   const handleBlur = () => {
     if (!isFormDirty) {
       reset();
-      console.log("bla", props.menuItem, defaultValues)
+      console.log("bla", props.menuItem, defaultValues);
       props.toggle(false);
     }
   };

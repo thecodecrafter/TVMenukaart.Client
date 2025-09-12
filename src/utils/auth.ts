@@ -13,7 +13,7 @@ export const tokenLoader = () => {
 export const checkAuthLoader = () => {
   const token = getAuthToken();
   if (!token) {
-    console.log("TOKEN", token)
+    console.log("TOKEN", token);
     return redirect("/login");
   }
 

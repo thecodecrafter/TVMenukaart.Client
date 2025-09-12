@@ -6,7 +6,7 @@ export const instance = axios.create({
 });
 
 instance.interceptors.request.use(
-  async (config) => {
+  async config => {
     const token = localStorage.getItem("token");
 
     if (token) {
@@ -15,7 +15,7 @@ instance.interceptors.request.use(
 
     return config;
   },
-  (error) => {
+  error => {
     return Promise.reject(error);
   }
 );

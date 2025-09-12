@@ -1,9 +1,9 @@
-import axios from "../service/api";
 import {
   AuthClient,
   IAuthClient,
   VerifyCodeRequest,
 } from "../client/MenuMaster.Client.Generated";
+import axios from "../service/api";
 
 export class DeviceCodeService {
   private readonly client: IAuthClient;

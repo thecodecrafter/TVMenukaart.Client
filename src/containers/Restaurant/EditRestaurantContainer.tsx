@@ -1,11 +1,12 @@
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+
 import { Loader } from "../../components/Loader";
 import { useApiEndpointContext } from "../../context/useApiEndpointContext";
 import { useFetch } from "../../hooks/useFetch";
 import { RestaurantService } from "../../service/RestaurantService";
-import { useState } from "react";
 import Connector from "../../signalr-connection";
-import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 
 type EditRestaurantContainerProps = {
   restaurantId: string;
@@ -50,7 +51,7 @@ export const EditRestaurantContainer = (
         reset();
         navigate("/admin/restaurants");
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   };
 
   if (result.isProcessing) {

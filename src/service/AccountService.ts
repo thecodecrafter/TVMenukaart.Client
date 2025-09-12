@@ -1,4 +1,3 @@
-import axios from "../service/api";
 import {
   AccountClient,
   ClientApiException,
@@ -7,6 +6,7 @@ import {
   RegisterDto,
 } from "../client/MenuMaster.Client.Generated";
 import { UserDomainModel } from "../domain/UserDomainModel";
+import axios from "../service/api";
 
 export class AccountService {
   private readonly client: IAccountClient;
@@ -18,7 +18,7 @@ export class AccountService {
   login = (username: string, password: string): Promise<UserDomainModel> => {
     return this.client
       .login(new LoginDto({ username, password }))
-      .then((response) => {
+      .then(response => {
         const user = new UserDomainModel(
           response.id!,
           response.username!,
@@ -39,7 +39,7 @@ export class AccountService {
   register = (username: string, password: string): Promise<UserDomainModel> => {
     return this.client
       .register(new RegisterDto({ username, password }))
-      .then((response) => {
+      .then(response => {
         console.log(response);
         const user = new UserDomainModel(
           response.id!,
@@ -59,7 +59,7 @@ export class AccountService {
   refreshToken = (): Promise<UserDomainModel> => {
     return this.client
       .refreshToken()
-      .then((response) => {
+      .then(response => {
         const user = new UserDomainModel(
           response.id!,
           response.username!,

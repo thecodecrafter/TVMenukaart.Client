@@ -1,12 +1,11 @@
-import axios from "../service/api";
 import {
   IMenuClient,
   MenuClient,
   MenuDto,
 } from "../client/MenuMaster.Client.Generated";
-
 import { MenuDomainModel } from "../domain/MenuDomainModel";
 import { MenuMapper } from "../mapper/MenuMapper";
+import axios from "../service/api";
 
 export class MenuService {
   private readonly client: IMenuClient;
@@ -18,7 +17,7 @@ export class MenuService {
   GetAllMenus = async (): Promise<MenuDomainModel[]> => {
     const menuMapper = new MenuMapper();
     const data = await this.client.menuAll();
-    return data.map((item) => menuMapper.map(item));
+    return data.map(item => menuMapper.map(item));
     // return this.client
     //   .menuAll()
     //   .then((response) => {
@@ -30,7 +29,7 @@ export class MenuService {
   GetMenu = (menuId: number): Promise<MenuDomainModel> => {
     const mapper = new MenuMapper();
 
-    return this.client.menuGET(menuId).then((response) => {
+    return this.client.menuGET(menuId).then(response => {
       return mapper.map(response);
     });
   };
@@ -40,10 +39,10 @@ export class MenuService {
 
     return this.client
       .menuPOST(name, restaurantId)
-      .then((response) => {
+      .then(response => {
         return mapper.map(response);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
         throw new Error(error);
       });
@@ -57,6 +56,6 @@ export class MenuService {
   };
 
   deleteMenu = (id: number): Promise<void> => {
-    return this.client.menuDELETE(id).catch((error) => console.error(error));
+    return this.client.menuDELETE(id).catch(error => console.error(error));
   };
 }

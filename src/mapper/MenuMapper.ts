@@ -12,7 +12,7 @@ export class MenuMapper extends AbstractMapper<MenuDto, MenuDomainModel> {
     result.name = model.name ?? "";
     result.publicUrl = model.publicUrl ?? undefined;
     result.menuSections = model.menuSections
-      ? model.menuSections.map((item) => mapper.map(item))
+      ? model.menuSections.map(item => mapper.map(item))
       : null;
 
     return result;

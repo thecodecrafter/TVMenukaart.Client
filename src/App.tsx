@@ -1,6 +1,7 @@
 import { RouterProvider } from "react-router-dom";
-import { ApiEndpointContextProvider } from "./context/useApiEndpointContext";
+
 import { AuthProvider } from "./context/AuthContext";
+import { ApiEndpointContextProvider } from "./context/useApiEndpointContext";
 import { router } from "./Routes";
 
 const AppContent = () => {

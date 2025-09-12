@@ -1,13 +1,17 @@
 import { useState } from "react";
-import { useApiEndpointContext } from "../../context/useApiEndpointContext";
-import { MenuService } from "../../service/MenuService";
-import { useFetch } from "../../hooks/useFetch";
+import { useNavigate } from "react-router-dom";
+
 import { ConfirmationModal } from "../../components/ConfirmationModal";
 import { Loader } from "../../components/Loader";
-import Connector from "../../signalr-connection";
+import { MenuPreview } from "../../components/MenuPreview";
+import { MenuThumbnail } from "../../components/MenuThumbnail";
+import { useApiEndpointContext } from "../../context/useApiEndpointContext";
 import { MenuDomainModel } from "../../domain/MenuDomainModel";
-import { useNavigate } from "react-router-dom";
+import { useFetch } from "../../hooks/useFetch";
+import IconAddMenu from "../../icons/IconAddMenu";
+import { MenuService } from "../../service/MenuService";
 import { RestaurantService } from "../../service/RestaurantService";
+import Connector from "../../signalr-connection";
 
 type MenusContainerProps = {
   restaurantId: string;
@@ -17,10 +21,13 @@ export const MenusContainer = (props: MenusContainerProps) => {
   const apiUrl = useApiEndpointContext();
   const menuService = new MenuService(apiUrl);
   const restaurantService = new RestaurantService(apiUrl);
-  const [menu, setMenu] = useState<MenuDomainModel>();
-  const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false);
+  const [selectedMenu, setSelectedMenu] = useState<MenuDomainModel | null>(
+    null
+  );
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const [refreshCounter, setRefreshCounter] = useState(0);
+  const navigate = useNavigate();
 
   const connector = Connector.getInstance();
   connector.onMenuReceived(() => setRefreshCounter(refreshCounter + 1));
@@ -34,156 +41,121 @@ export const MenusContainer = (props: MenusContainerProps) => {
 
   const handleDeleteMenu = (id: number) => menuService.deleteMenu(id);
 
+  const handlePreview = (menu: MenuDomainModel) => {
+    setSelectedMenu(menu);
+    setShowPreview(true);
+  };
+
+  const handleEdit = (menu: MenuDomainModel) => {
+    navigate(`/admin/menus/${menu.id}/edit`);
+  };
+
+  const handleDelete = (menu: MenuDomainModel) => {
+    setSelectedMenu(menu);
+    setShowDeleteModal(true);
+  };
+
+  const handleClosePreview = () => {
+    setShowPreview(false);
+    setSelectedMenu(null);
+  };
+
+  const handleMenuUpdated = () => {
+    // Refresh the data to show the updated menu
+    setRefreshCounter(prev => prev + 1);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+    setSelectedMenu(null);
+  };
+
   if (result.isProcessing) {
     return <Loader />;
   }
 
   return (
     <div className="flex flex-col content-start pt-0 pr-12">
+      {/* Delete Confirmation Modal */}
       <ConfirmationModal
-        body={`Verwijderen van menu ${menu?.name}`}
-        title="Wilt u zeker dit restaurant verwijderen?"
+        body={`Verwijderen van scherm ${selectedMenu?.name}`}
+        title="Wilt u zeker dit scherm verwijderen?"
         confirmationPromise={() =>
-          menu ? handleDeleteMenu(menu.id) : Promise.resolve()
+          selectedMenu ? handleDeleteMenu(selectedMenu.id) : Promise.resolve()
         }
-        show={showModal}
-        handleClose={() => setShowModal(false)}
-        dialogId={menu ? menu.id.toString() : ""}
+        show={showDeleteModal}
+        handleClose={handleCloseDeleteModal}
+        dialogId={selectedMenu ? selectedMenu.id.toString() : ""}
       />
-      <h1>Restaurant: {result.data?.name}</h1>
+
+      {/* Menu Preview Modal */}
+      {selectedMenu && showPreview && (
+        <MenuPreview
+          menu={selectedMenu}
+          onClose={handleClosePreview}
+          onMenuUpdated={handleMenuUpdated}
+        />
+      )}
+
+      <h1 className="text-2xl font-bold mb-6">
+        Restaurant: {result.data?.name}
+      </h1>
 
       {!result.data?.menus || result.data.menus.length < 1 ? (
-        <div className="flex flex-col">
+        <div className="flex flex-col items-center justify-center py-12">
+          <div className="text-center mb-6">
+            <IconAddMenu
+              width={64}
+              height={64}
+              className="mx-auto mb-4 text-gray-400"
+            />
+            <h2 className="text-xl font-semibold text-gray-600 mb-2">
+              Geen schermen
+            </h2>
+            <p className="text-gray-500">
+              Voeg je eerste scherm toe om te beginnen
+            </p>
+          </div>
           <button
             onClick={() =>
               navigate(`/admin/restaurants/${result.data?.id}/menus/add`)
             }
-            className="px-5 py-2.5 text-sm mb-4 sm:mb-6 text-center bg-primary rounded-lg text-white border p-3"
+            className="px-6 py-3 text-sm bg-primary rounded-lg text-white border hover:bg-primary/90 transition-colors"
           >
             Voeg je eerste scherm toe
           </button>
         </div>
       ) : (
         <div>
-          <div className="flex justify-end">
+          <div className="flex justify-end mb-6">
             <button
               onClick={() =>
                 navigate(`/admin/restaurants/${result.data?.id}/menus/add`)
               }
-              className="px-5 py-2.5 text-sm mb-4 sm:mb-6 text-center bg-primary rounded-lg text-white border p-3"
+              className="px-6 py-3 text-sm bg-primary rounded-lg text-white border hover:bg-primary/90 transition-colors flex items-center gap-2"
             >
+              <IconAddMenu width={20} height={20} />
               Voeg nieuw scherm toe
             </button>
           </div>
-          <div className="realtive overflow-x-auto shadow-md sm:rounded-lg">
-            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                  <th scope="col" className="px-6 py-3">
-                    Scherm naam
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Actie
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {result.data?.menus?.map((item) => (
-                  <tr
-                    key={item.id}
-                    onClick={() => {
-                      navigate(`/admin/menus/${item.id}`);
-                    }}
-                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 cursor-pointer"
-                  >
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      {item.name}
-                    </th>
-                    <td className="px-6 py-4 text-[red]">
-                      <button
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          navigate(`/admin/menus/${item.id}/edit`);
-                        }}
-                        className="z-10 first:pr-4 font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                      >
-                        Bewerk
-                      </button>
-                      <button
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          setMenu(item);
-                          setShowModal(true);
-                        }}
-                        className="z-10 font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                      >
-                        Verwijder
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+
+          {/* Thumbnails Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {result.data?.menus?.map(menu => (
+              <MenuThumbnail
+                key={menu.id}
+                menu={menu}
+                onPreview={handlePreview}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onTVPreview={() =>
+                  navigate(`/admin/menus/${menu.id}/tv-preview`)
+                }
+              />
+            ))}
           </div>
         </div>
       )}
     </div>
-    // <div className="flex flex-wrap flex-row content-start pt-16 max-h-lvh">
-    //   <Modal
-    //     body={`Verwijderen van scherm ${menuId}`}
-    //     title="Wilt u zeker dit scherm verwijderen?"
-    //     confirmationPromise={() => handleDeleteMenu(menuId)}
-    //     show={showModal}
-    //     handleClose={() => setShowModal(false)}
-    //     dialogId={menuId.toString()}
-    //   />
-    //   {result.data?.map((item) => (
-    //     <div key={item.id} className="indicator mb-5 mr-5 group">
-    //       <span
-    //         className="indicator-item p-2 rounded-full bg-[#09244B] cursor-pointer group-hover:block hidden"
-    //         onClick={() => {
-    //           setMenuId(item.id);
-    //           setShowModal(true);
-    //         }}
-    //       >
-    //         <IconClose width={10} height={10} />
-    //       </span>
-    //       <a href={`/admin/menus/${item.id}`} className="no-underline">
-    //         <div
-    //           className={`border-2 border-solid hover:cursor-pointer rounded-2xl w-80 h-56 flex justify-center items-center text-center`}
-    //         >
-    //           <h2 className="capitalize">{item.name}</h2>
-    //         </div>
-    //       </a>
-    //     </div>
-    //   ))}
-    //   <div
-    //     className={`border-2 hover:border-solid hover:cursor-pointer border-dashed rounded-2xl w-80 h-56 flex justify-center items-center text-center`}
-    //     onClick={() => {
-    //       if (toggle) {
-    //         setToggle(false);
-    //       } else {
-    //         setToggle(true);
-    //       }
-    //     }}
-    //     onBlur={(e) => {
-    //       e.stopPropagation();
-    //     }}
-    //   >
-    //     {toggle ? (
-    //       <MenuForm
-    //         toggle={() => {
-    //           setToggle(false);
-    //         }}
-    //         restaurantId={+props.restaurantId}
-    //       />
-    //     ) : (
-    //       <IconAddMenu />
-    //     )}
-    //   </div>
-    // </div>
   );
 };

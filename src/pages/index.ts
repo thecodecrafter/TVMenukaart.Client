@@ -1,0 +1,11 @@
+export { MenusPage } from "./MenusPage";
+export { MenuPage } from "./MenuPage";
+export { TVPreviewPage } from "./TVPreviewPage";
+export { LoginPage } from "./LoginPage";
+export { RegisterPage } from "./RegisterPage";
+export { VerifyPage } from "./VerifyPage";
+export { AdminPage } from "./admin/AdminPage";
+export { ProfilePage } from "./admin/ProfilePage";
+export { RestaurantsPage } from "./admin/Restaurant";
+export { EditMenuPage } from "./admin/Menu/EditMenuPage";
+export { AddMenuPage } from "./admin/Menu/AddMenuPage";

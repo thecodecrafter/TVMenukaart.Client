@@ -1,10 +1,11 @@
 import { useState } from "react";
+
+import { MenuSection } from "../components/MenuSection";
 import { useApiEndpointContext } from "../context/useApiEndpointContext";
 import { useFetch } from "../hooks/useFetch";
+import useFullscreen from "../hooks/useFullscreen";
 import { MenuSectionsService } from "../service/MenuSectionsService";
 import Connector from "../signalr-connection";
-import useFullscreen from "../hooks/useFullscreen";
-import { MenuSection } from "../components/MenuSection";
 
 type ClientContainerProps = {
   uuId: string;

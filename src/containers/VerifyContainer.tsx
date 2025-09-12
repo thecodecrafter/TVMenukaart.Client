@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+
 import { useApiEndpointContext } from "../context/useApiEndpointContext";
 import { DeviceCodeService } from "../service/DeviceCodeService";
 
@@ -12,7 +13,7 @@ export const VerifyContainer = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   useEffect(() => {
-    if (otp.every((char) => char !== "")) {
+    if (otp.every(char => char !== "")) {
       handleSubmit(otp.join(""));
     }
   }, [otp]);
@@ -23,10 +24,10 @@ export const VerifyContainer = () => {
 
     service
       .verify(code)
-      .then((res) => {
+      .then(res => {
         console.log("code is verified", res);
       })
-      .catch((err) => {
+      .catch(err => {
         setErrorMessage(err.message);
         console.log("Something went wrong", err);
       });
@@ -89,7 +90,7 @@ export const VerifyContainer = () => {
 
   return (
     <div className="flex flex-1 flex-col items-center h-full justify-center bg-[#000] text-[#000]">
-      <h1 className="text-[#FFF] text-5xl font-normal">Voer je code in:</h1>
+      <h1 className="text-[#FFF] text-5xl font-normal">Voer je code in::</h1>
       <div className="flex space-x-3 pt-[2rem]">
         {otp.map((value, index) => (
           <input
@@ -97,10 +98,10 @@ export const VerifyContainer = () => {
             type="text"
             maxLength={1}
             value={value}
-            onChange={(e) => handleChange(e.target.value, index)}
-            onKeyDown={(e) => handleKeyDown(e, index)}
+            onChange={e => handleChange(e.target.value, index)}
+            onKeyDown={e => handleKeyDown(e, index)}
             onPaste={handlePaste}
-            ref={(el) => (inputsRef.current[index] = el)}
+            ref={el => (inputsRef.current[index] = el)}
             className="w-12 h-12 text-center border-2 border-gray-300 rounded-lg text-xl font-bold focus:outline-none focus:border-blue-500 uppercase"
           />
         ))}

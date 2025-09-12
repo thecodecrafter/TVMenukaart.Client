@@ -121,3 +121,168 @@ input:autofill {
   border: solid 3px green;
   background-color: yellow; */
 }
+
+/* TV Menu Preview Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.6s ease-out 0.2s backwards;
+}
+
+.menu-item-hover {
+  transition: all 0.3s ease;
+}
+
+.menu-item-hover:hover {
+  transform: translateX(5px);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding-left: 12px !important;
+}
+
+.menu-section-animated {
+  animation: slideInUp 0.6s ease-out;
+}
+
+.floating-element {
+  animation: float 3s ease-in-out infinite;
+}
+
+.pulse-animation {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.shimmer-effect {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Layout Templates */
+.coffee-shop-layout {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  color: #2c3e50;
+  font-family: "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+}
+
+.restaurant-layout {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+  color: #ffffff;
+  font-family: "Playfair Display", serif;
+}
+
+.modern-layout {
+  background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+}
+
+.fast-food-layout {
+  background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+  color: #2c2c2c;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Responsive TV Preview */
+@media (max-width: 1400px) {
+  .tv-preview-container {
+    transform: scale(0.8);
+    transform-origin: top center;
+  }
+}
+
+@media (max-width: 1200px) {
+  .tv-preview-container {
+    transform: scale(0.7);
+  }
+}
+
+/* Menu Item Animations */
+.menu-item-slide-in {
+  animation: slideInUp 0.4s ease-out;
+}
+
+.menu-item-slide-in:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.menu-item-slide-in:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.menu-item-slide-in:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.menu-item-slide-in:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.menu-item-slide-in:nth-child(5) {
+  animation-delay: 0.5s;
+}

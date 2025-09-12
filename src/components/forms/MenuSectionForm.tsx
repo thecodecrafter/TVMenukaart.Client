@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+
 import { useApiEndpointContext } from "../../context/useApiEndpointContext";
+import { useClickedOutside } from "../../hooks/useClickedOutside";
 // import { MenuItemDomainModel } from "../../domain/MenuItemDomainModel";
 import IconBin from "../../icons/IconBin";
-import { useClickedOutside } from "../../hooks/useClickedOutside";
 import { MenuSectionsService } from "../../service/MenuSectionsService";
 
 type MenuSectionFormProps = {
@@ -50,7 +51,7 @@ export const MenuSectionForm = (props: MenuSectionFormProps) => {
           reset();
           props.toggle(false);
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     }
@@ -98,7 +99,7 @@ export const MenuSectionForm = (props: MenuSectionFormProps) => {
           <button
             className="btn btn-ghost"
             type="button"
-            onClick={(e) => {
+            onClick={e => {
               e.preventDefault();
               props.toggle(false);
             }}

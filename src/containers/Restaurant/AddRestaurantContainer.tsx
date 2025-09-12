@@ -1,7 +1,8 @@
 import { useForm } from "react-hook-form";
-import { RestaurantService } from "../../service/RestaurantService";
-import { useApiEndpointContext } from "../../context/useApiEndpointContext";
 import { useNavigate } from "react-router-dom";
+
+import { useApiEndpointContext } from "../../context/useApiEndpointContext";
+import { RestaurantService } from "../../service/RestaurantService";
 
 type RestaurantSchemaModel = {
   id: number;
@@ -23,7 +24,7 @@ export const AddRestaurantContainer = () => {
         reset();
         navigate("/admin/restaurants");
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   };
 
   return (

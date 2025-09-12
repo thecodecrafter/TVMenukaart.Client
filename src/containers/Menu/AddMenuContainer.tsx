@@ -1,7 +1,8 @@
 import { useForm } from "react-hook-form";
-import { MenuService } from "../../service/MenuService";
-import { useApiEndpointContext } from "../../context/useApiEndpointContext";
 import { useNavigate } from "react-router-dom";
+
+import { useApiEndpointContext } from "../../context/useApiEndpointContext";
+import { MenuService } from "../../service/MenuService";
 
 type MenuContainerProps = {
   restaurantId: number;
@@ -27,7 +28,7 @@ export const AddMenuContainer = (props: MenuContainerProps) => {
         reset();
         navigate(`/admin/restaurants/${props.restaurantId}`);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   };
 
   return (

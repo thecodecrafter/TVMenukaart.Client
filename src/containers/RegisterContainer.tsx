@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+
 import { useApiEndpointContext } from "../context/useApiEndpointContext";
 import { AccountService } from "../service/AccountService";
 
@@ -26,7 +27,7 @@ export const RegisterContainer = () => {
       .then(() => {
         reset();
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   };

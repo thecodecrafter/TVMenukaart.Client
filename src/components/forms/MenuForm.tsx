@@ -4,10 +4,14 @@ import { useForm } from "react-hook-form";
 import { useApiEndpointContext } from "../../context/useApiEndpointContext";
 import { MenuDomainModel } from "../../domain/MenuDomainModel";
 import { MenuService } from "../../service/MenuService";
+import { LayoutTemplate } from "../LayoutTemplateSelector";
 
 type MenuProps = {
-  toggle: () => void;
+  toggle?: () => void;
+  onSubmit?: (name: string) => void;
+  onCancel?: () => void;
   restaurantId: number;
+  selectedLayout?: LayoutTemplate | null;
 };
 
 type MenuSchemaModel = {
@@ -45,14 +49,20 @@ export const MenuForm = (props: MenuProps) => {
   }, []);
 
   const onSubmit = async (data: MenuSchemaModel) => {
-    console.log(data);
+    console.log(data, { layout: props.selectedLayout });
+
+    if (props.onSubmit) {
+      props.onSubmit(data.name);
+      return;
+    }
+
     await menuService
       .AddMenu(data.name, props.restaurantId)
       .then(() => {
-        props.toggle();
+        if (props.toggle) props.toggle();
         reset();
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   };
@@ -65,31 +75,65 @@ export const MenuForm = (props: MenuProps) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      onClick={(e) => {
+      onClick={e => {
         console.log(e.currentTarget);
         e.stopPropagation();
       }}
       className="admin-form"
       noValidate
     >
-      <div className="join join-vertical lg:join-vertical">
-        <input
-          type="text"
-          placeholder="Naam"
-          autoFocus={true}
-          {...register("name", {
-            required: "Naam is verplicht",
-          })}
-          className={`input input-bordered max-w-xs join-item focus:outline-none ${
-            errors.name
-              ? "focus:border-red-500 focus-within:border-red-500 border-red-500"
-              : ""
-          }`}
-        />
-        <p className="text-red-500 text-xs italic">{errors.name?.message}</p>
-        <button className="btn btn-primary join-item" type="submit">
-          Opslaan
-        </button>
+      <div className="space-y-6">
+        {props.selectedLayout && (
+          <div className="p-4 bg-blue-50 rounded-lg">
+            <div className="text-sm font-medium text-blue-900 mb-1">
+              Geselecteerde layout:
+            </div>
+            <div className="text-sm text-blue-700 capitalize">
+              {props.selectedLayout.replace("-", " ")}
+            </div>
+          </div>
+        )}
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Menu naam
+          </label>
+          <input
+            type="text"
+            placeholder="Voer menu naam in..."
+            autoFocus={true}
+            {...register("name", {
+              required: "Naam is verplicht",
+            })}
+            className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              errors.name
+                ? "border-red-500 focus:ring-red-500"
+                : "border-gray-300"
+            }`}
+          />
+          {errors.name && (
+            <p className="text-red-500 text-sm mt-1">{errors.name?.message}</p>
+          )}
+        </div>
+
+        <div className="flex justify-between pt-4">
+          {props.onCancel && (
+            <button
+              type="button"
+              onClick={props.onCancel}
+              className="px-6 py-3 text-gray-600 hover:text-gray-800 transition-colors"
+            >
+              ← Terug
+            </button>
+          )}
+
+          <button
+            className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors ml-auto"
+            type="submit"
+          >
+            {props.onSubmit ? "Volgende" : "Opslaan"}
+          </button>
+        </div>
       </div>
     </form>
   );

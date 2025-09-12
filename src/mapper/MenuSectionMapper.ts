@@ -15,7 +15,7 @@ export class MenuSectionMapper extends AbstractMapper<
     result.id = model.id ?? 0;
     result.name = getValueOrNull(model.name);
     result.menuItems = model.menuItems
-      ? model.menuItems?.map((item) => mapper.map(item))
+      ? model.menuItems?.map(item => mapper.map(item))
       : null;
 
     return result;

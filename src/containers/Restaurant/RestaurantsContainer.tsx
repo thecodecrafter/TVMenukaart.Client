@@ -1,11 +1,12 @@
+import { Suspense, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { ConfirmationModal } from "../../components/ConfirmationModal";
 import { Loader } from "../../components/Loader";
 import { useApiEndpointContext } from "../../context/useApiEndpointContext";
+import { RestaurantDomainModel } from "../../domain/RestaurantDomainModel";
 import { useFetch } from "../../hooks/useFetch";
 import { RestaurantService } from "../../service/RestaurantService";
-import { ConfirmationModal } from "../../components/ConfirmationModal";
-import { Suspense, useState } from "react";
-import { RestaurantDomainModel } from "../../domain/RestaurantDomainModel";
 
 export const RestaurantsContainer = () => {
   const apiUrl = useApiEndpointContext();
@@ -24,7 +25,7 @@ export const RestaurantsContainer = () => {
 
   const handleDeleteRestaurant = (id: number) =>
     restaurantService.deleteRestaurant(id).then(() => {
-      setRefreshCounter((prev) => prev + 1);
+      setRefreshCounter(prev => prev + 1);
     });
 
   // if (result.isProcessing) {
@@ -72,7 +73,7 @@ export const RestaurantsContainer = () => {
           </thead>
           <Suspense fallback={<Loader />}>
             <tbody>
-              {result.data?.map((item) => (
+              {result.data?.map(item => (
                 <tr
                   key={item.id}
                   onClick={() => {
@@ -90,7 +91,7 @@ export const RestaurantsContainer = () => {
                   <td className="px-6 py-4">{item.menuCount}</td>
                   <td className="px-6 py-4 text-[red]">
                     <button
-                      onClick={(event) => {
+                      onClick={event => {
                         event.stopPropagation();
                         navigate(`${item.id}/edit`);
                       }}
@@ -99,7 +100,7 @@ export const RestaurantsContainer = () => {
                       Bewerk
                     </button>
                     <button
-                      onClick={(event) => {
+                      onClick={event => {
                         event.stopPropagation();
                         setRestaurant(item);
                         setShowModal(true);

@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { AuthForm } from "../components/forms/AuthForm";
 import { useAuth } from "../context/AuthContext";
@@ -14,12 +14,11 @@ export const LoginContainer = () => {
   const handleLogin = async (username: string, password: string) => {
     setError("");
     setIsLoading(true);
-    
+
     try {
       await login(username, password);
       navigate("/admin/restaurants");
     } catch (error) {
-      
       const errorMessage = ClientHelper.getErrorMessage(error);
       console.log("ERROR222: ", errorMessage);
       setError(errorMessage);
@@ -38,11 +37,7 @@ export const LoginContainer = () => {
           {error}
         </div>
       )}
-      {isLoading && (
-        <div className="mt-4 text-blue-600">
-          Inloggen...
-        </div>
-      )}
+      {isLoading && <div className="mt-4 text-blue-600">Inloggen...</div>}
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+
 import { MenuSectionContainer } from "../containers/MenuSection/MenuSectionContainer";
 
 export const MenuPage = () => {

@@ -18,7 +18,7 @@ class Connector {
       .then(() => {
         console.log("Connection started");
       })
-      .catch((error) =>
+      .catch(error =>
         console.log("Error occurred when establishing connection: ", error)
       );
 

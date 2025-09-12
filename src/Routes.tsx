@@ -1,17 +1,22 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import { EditRestaurantPage } from "./pages/admin/Restaurant/EditRestaurantPage";
-import { AddRestaurantPage } from "./pages/admin/Restaurant/AddRestaurantPage";
-import { RestaurantsPage } from "./pages/admin/Restaurant/RestaurantsPage";
-import { EditMenuPage } from "./pages/admin/Menu/EditMenuPage";
-import { AddMenuPage } from "./pages/admin/Menu/AddMenuPage";
-import { ProfilePage } from "./pages/admin/ProfilePage";
-import { AdminPage } from "./pages/admin/AdminPage";
-import { RegisterPage } from "./pages/RegisterPage";
-import { VerifyPage } from "./pages/VerifyPage";
-import { MenusPage } from "./pages/MenusPage";
-import LoginPage from "./pages/LoginPage";
-import MenuPage from "./pages/MenuPage";
+import {
+  AddMenuPage,
+  AdminPage,
+  EditMenuPage,
+  LoginPage,
+  MenuPage,
+  MenusPage,
+  ProfilePage,
+  RegisterPage,
+  RestaurantsPage,
+  TVPreviewPage,
+  VerifyPage,
+} from "./pages";
+import {
+  AddRestaurantPage,
+  EditRestaurantPage,
+} from "./pages/admin/Restaurant";
 
 export const router = createBrowserRouter([
   {
@@ -53,6 +58,10 @@ export const router = createBrowserRouter([
           {
             path: "menus/:menuId",
             element: <MenuPage />,
+          },
+          {
+            path: "menus/:menuId/tv-preview",
+            element: <TVPreviewPage />,
           },
         ],
       },

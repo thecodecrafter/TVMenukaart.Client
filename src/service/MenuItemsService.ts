@@ -1,11 +1,11 @@
-import axios from "../service/api";
 import {
   IMenuItemsClient,
   MenuItemsClient,
 } from "../client/MenuMaster.Client.Generated";
 import { MenuItemDomainModel } from "../domain/MenuItemDomainModel";
-import { MenuItemMapper } from "../mapper/MenuItemMapper";
 import { CreateMenuItemMapper } from "../mapper/CreateMenuItemMapper";
+import { MenuItemMapper } from "../mapper/MenuItemMapper";
+import axios from "../service/api";
 
 export class MenuItemsService {
   private readonly client: IMenuItemsClient;
@@ -17,15 +17,15 @@ export class MenuItemsService {
   menuItemsAll = (menuSectionId: number): Promise<MenuItemDomainModel[]> => {
     const menuItemMapper = new MenuItemMapper();
 
-    return this.client.menuSection(menuSectionId).then((result) => {
-      return result.map((item) => menuItemMapper.map(item));
+    return this.client.menuSection(menuSectionId).then(result => {
+      return result.map(item => menuItemMapper.map(item));
     });
   };
 
   menuItemsGET = (id: number): Promise<MenuItemDomainModel> => {
     const menuItemMapper = new MenuItemMapper();
 
-    return this.client.menuItemsGET(id).then((result) => {
+    return this.client.menuItemsGET(id).then(result => {
       return menuItemMapper.map(result);
     });
   };
@@ -46,10 +46,10 @@ export class MenuItemsService {
 
     return this.client
       .menuItemsPOST(createMenuItem)
-      .then((response) => {
+      .then(response => {
         return menuItemMapper.map(response);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
         throw new Error("");
       });
@@ -61,7 +61,7 @@ export class MenuItemsService {
       .then(() => {
         return;
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
         throw new Error("Deleting menu item went wrong");
       });

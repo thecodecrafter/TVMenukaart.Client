@@ -1,8 +1,9 @@
+import { useEffect, useState } from "react";
+
 import {
   DocumentElementWithFullscreen,
   DocumentWithFullscreen,
 } from "./useFullscreen.types";
-import { useEffect, useState } from "react";
 
 const isWindowFullscreen = (): boolean => {
   return (

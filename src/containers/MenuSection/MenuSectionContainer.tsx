@@ -1,16 +1,17 @@
 import { useState } from "react";
 
+import { MenuSectionForm } from "../../components/forms/MenuSectionForm";
+import { Loader } from "../../components/Loader";
 import { MenuSection } from "../../components/MenuSection";
-import { MenuSectionsService } from "../../service/MenuSectionsService";
+import { PopupModal } from "../../components/PopupModal";
 import { useApiEndpointContext } from "../../context/useApiEndpointContext";
 // import { MenuItemsService } from "../../service/MenuItemsService";
 import { useFetch } from "../../hooks/useFetch";
-import { MenuSectionForm } from "../../components/forms/MenuSectionForm";
+import { MenuItemsService } from "../../service/MenuItemsService";
+import { MenuSectionsService } from "../../service/MenuSectionsService";
 import { MenuService } from "../../service/MenuService";
 import Connector from "../../signalr-connection";
-import { PopupModal } from "../../components/PopupModal";
-import { Loader } from "../../components/Loader";
-import { MenuItemsService } from "../../service/MenuItemsService";
+
 // import { MenuItemDomainModel } from "../../domain/MenuItemDomainModel";
 
 type MenuSectionContainerProps = {
@@ -53,7 +54,7 @@ export const MenuSectionContainer = (props: MenuSectionContainerProps) => {
 
   const handleDeleteMenuItem = (id: number) => {
     return menuItemService.menuItemDELETE(id);
-  }
+  };
 
   if (menu.isProcessing) {
     return <Loader />;
@@ -81,7 +82,7 @@ export const MenuSectionContainer = (props: MenuSectionContainerProps) => {
         title="Toevoegen productgroep"
         body={
           <MenuSectionForm
-            toggle={(val) => setShowModal(val)}
+            toggle={val => setShowModal(val)}
             menuId={+props.menuId}
           />
         }
@@ -118,10 +119,10 @@ export const MenuSectionContainer = (props: MenuSectionContainerProps) => {
           }}
           className="px-5 py-2.5 text-sm mb-4 sm:mb-6 text-center bg-primary rounded-lg text-white border p-3"
         >
-          Productgroep toevoegen
+          Productgroep toevoegenn
         </button>
       </div>
-      {menu.data?.menuSections?.map((item) => (
+      {menu.data?.menuSections?.map(item => (
         <MenuSection
           menuSection={item}
           handleDeleteMenuItem={handleDeleteMenuItem}

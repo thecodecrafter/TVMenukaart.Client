@@ -15,7 +15,7 @@ export class RestaurantMapper extends AbstractMapper<
     result.name = model.name ?? "";
     result.menuCount = model.menuCount;
     result.menus = model.menus
-      ? model.menus?.map((menu) => mapper.map(menu))
+      ? model.menus?.map(menu => mapper.map(menu))
       : null;
 
     return result;

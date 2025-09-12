@@ -1,4 +1,3 @@
-import axios from "../service/api";
 import {
   IRestaurantClient,
   Restaurant,
@@ -7,6 +6,7 @@ import {
 } from "../client/MenuMaster.Client.Generated";
 import { RestaurantDomainModel } from "../domain/RestaurantDomainModel";
 import { RestaurantMapper } from "../mapper/RestaurantMapper";
+import axios from "../service/api";
 
 export class RestaurantService {
   private readonly client: IRestaurantClient;
@@ -19,7 +19,7 @@ export class RestaurantService {
     const mapper = new RestaurantMapper();
     const data = await this.client.restaurantAll();
 
-    return data.map((item) => mapper.map(item));
+    return data.map(item => mapper.map(item));
   };
 
   GetRestaurant = async (id: number): Promise<RestaurantDomainModel> => {
@@ -38,11 +38,11 @@ export class RestaurantService {
 
     return this.client
       .restaurantPOST(restaurant)
-      .then((response) => {
+      .then(response => {
         const mapper = new RestaurantMapper();
         return mapper.map(response);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
         throw new Error(error);
       });

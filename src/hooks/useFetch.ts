@@ -29,7 +29,7 @@ export const useFetch = <T>(
 
   useEffect(() => {
     if (active) {
-      setState((prevState) => ({
+      setState(prevState => ({
         ...prevState,
         isProcessing: true,
         error: null,
@@ -37,8 +37,8 @@ export const useFetch = <T>(
       }));
 
       handler().then(
-        (value) => {
-          setState((prevState) => ({
+        value => {
+          setState(prevState => ({
             ...prevState,
             data: value,
             isProcessing: false,
@@ -48,8 +48,8 @@ export const useFetch = <T>(
             hasFetched: true,
           }));
         },
-        (reason) => {
-          setState((prevState) => ({
+        reason => {
+          setState(prevState => ({
             ...prevState,
             data: null,
             isProcessing: false,

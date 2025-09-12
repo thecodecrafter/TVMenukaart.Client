@@ -1,7 +1,8 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+
 import { useApiEndpointContext } from "../context/useApiEndpointContext";
-import { MenuService } from "../service/MenuService";
 import { MenuDomainModel } from "../domain/MenuDomainModel";
+import { MenuService } from "../service/MenuService";
 
 export const HomeContainer = () => {
   const apiUrl = useApiEndpointContext();
@@ -9,7 +10,7 @@ export const HomeContainer = () => {
   const [menus, setMenus] = useState<MenuDomainModel[]>();
 
   useEffect(() => {
-    menuService.GetAllMenus().then((response) => setMenus(response));
+    menuService.GetAllMenus().then(response => setMenus(response));
   }, [menuService]);
 
   return (
@@ -17,7 +18,7 @@ export const HomeContainer = () => {
       <h1>Welkom</h1>
       <h2>Maak een keuze uit de volgende menus om te tonen</h2>
       <ul>
-        {menus?.map((item) => {
+        {menus?.map(item => {
           const publicUrl = `${import.meta.env.VITE_clientUrl}menus/${
             item?.publicUrl
           }`;

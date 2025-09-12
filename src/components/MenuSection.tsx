@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { MenuSectionDomainModel } from "../domain/MenuSectionDomainModel";
-import { MenuItemForm } from "./forms/MenuItemForm";
-import { PopupModal } from "./PopupModal";
+
+import { useApiEndpointContext } from "../context/useApiEndpointContext";
 import { MenuItemDomainModel } from "../domain/MenuItemDomainModel";
+import { MenuSectionDomainModel } from "../domain/MenuSectionDomainModel";
 import IconBin from "../icons/IconBin";
+import { MenuItemsService } from "../service/MenuItemsService";
 import { ConfirmationModal } from "./ConfirmationModal";
+import { MenuItemForm } from "./forms/MenuItemForm";
 import { MenuItem } from "./MenuItem";
+import { PopupModal } from "./PopupModal";
 
 export type MenuSectionProps = {
   menuSection: MenuSectionDomainModel;
@@ -19,50 +22,74 @@ export type MenuSectionProps = {
 export const MenuSection = (props: MenuSectionProps) => {
   const [showModal, setShowModal] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
-
   const [menuItem, setMenuItem] = useState<MenuItemDomainModel | undefined>(
     undefined
   );
+  const [deleteMenuItemId, setDeleteMenuItemId] = useState<number | null>(null);
+  const [refreshCounter, setRefreshCounter] = useState(0);
+  const apiUrl = useApiEndpointContext ? useApiEndpointContext() : undefined;
+  const menuItemService = apiUrl ? new MenuItemsService(apiUrl) : undefined;
+
+  const handleAddMenuItem = () => {
+    setMenuItem(undefined);
+    setShowModal(true);
+  };
+
+  const handleEditMenuItem = (item: MenuItemDomainModel) => {
+    setMenuItem(item);
+    setShowModal(true);
+  };
+
+  const handleDeleteMenuItem = (id: number) => {
+    setDeleteMenuItemId(id);
+    setShowConfirmation(true);
+  };
+
+  const confirmDeleteMenuItem = async () => {
+    if (deleteMenuItemId && menuItemService) {
+      await menuItemService.menuItemDELETE(deleteMenuItemId);
+      setShowConfirmation(false);
+      setDeleteMenuItemId(null);
+      setRefreshCounter(c => c + 1);
+      if (props.handleDeleteMenuItem)
+        props.handleDeleteMenuItem(deleteMenuItemId);
+    }
+  };
+
+  const handleFormClose = (refresh = false) => {
+    setShowModal(false);
+    setMenuItem(undefined);
+    if (refresh) setRefreshCounter(c => c + 1);
+  };
 
   return (
     <div>
       <PopupModal
-        title="Toevoegen productgroep"
+        title={menuItem ? "Bewerk product" : "Product toevoegen"}
         body={
           <MenuItemForm
             menuSectionId={props.menuSection.id}
-            toggle={() => console.log("toggle")}
-            key={props.menuSection.id}
+            toggle={handleFormClose}
+            key={menuItem ? menuItem.id : "new"}
             menuItem={menuItem}
           />
         }
         show={showModal}
-        handleClose={() => {
-          setShowModal(false);
-          console.log("handleclose");
-          setMenuItem(undefined);
-        }}
-        dialogId={"1"}
+        handleClose={() => handleFormClose(false)}
+        dialogId={menuItem ? menuItem.id.toString() : "new"}
       />
       <ConfirmationModal
-        confirmationPromise={() =>
-          props.handleDeleteMenuSection(props.menuSection.id)
-        }
-        dialogId="1"
+        confirmationPromise={confirmDeleteMenuItem}
+        dialogId={deleteMenuItemId ? deleteMenuItemId.toString() : ""}
         handleClose={() => setShowConfirmation(false)}
         show={showConfirmation}
-        title="Verwijder productgroep"
-        body="Weet u zeker dat u de productgroep wilt verwijderen?"
-        key={props.menuSection.id}
+        title="Verwijder product"
+        body="Weet u zeker dat u dit product wilt verwijderen?"
+        key={deleteMenuItemId}
       />
       <div className="flex flex-row items-center gap-4">
         <h1>{props.menuSection.name}</h1>
-        <IconBin
-          clickHandler={() =>
-            // props.handleDeleteMenuSection(props.menuSection.id)
-            setShowConfirmation(true)
-          }
-        />
+        <IconBin clickHandler={() => setShowConfirmation(true)} />
       </div>
       <div className="realtive overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -83,32 +110,20 @@ export const MenuSection = (props: MenuSectionProps) => {
             </tr>
           </thead>
           <tbody>
-            {props.menuSection.menuItems?.map((item) => {
-              console.log(item);
-              return (
-                <MenuItem
-                  menuItem={item}
-                  handleDeleteMenuItem={() => props.handleDeleteMenuItem(item.id)}
-                  handleEditMenuItem={() => console.log("handleEditMenuItem", item?.id)}
-                  key={item?.id}
-                />
-
-                // <MenuItemContainer
-                //   key={item.id}
-                //   menuItem={item}
-                //   menuItemId={item.id.toString()}
-                //   menuSectionId={props.menuSection.id}
-                // />
-              );
-            })}
+            {props.menuSection.menuItems?.map(item => (
+              <MenuItem
+                menuItem={item}
+                handleDeleteMenuItem={() => handleDeleteMenuItem(item.id)}
+                handleEditMenuItem={() => handleEditMenuItem(item)}
+                key={item?.id}
+              />
+            ))}
           </tbody>
         </table>
       </div>
       <button
         className="px-5 py-2.5 text-sm mt-4 sm:mb-6 text-center bg-primary rounded-lg text-white border p-3"
-        onClick={() => {
-          setShowModal(true);
-        }}
+        onClick={handleAddMenuItem}
       >
         Product toevoegen
       </button>

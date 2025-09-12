@@ -28,7 +28,7 @@ export const MenuItem = (props: MenuItemProps) => {
       </td>
       <td className="px-6 py-4 text-[red]">
         <button
-          onClick={(event) => {
+          onClick={event => {
             event.stopPropagation();
             // props.setMenuItem(props.menuItem);
             props.handleEditMenuItem();
@@ -39,7 +39,7 @@ export const MenuItem = (props: MenuItemProps) => {
           Bewerk
         </button>
         <button
-          onClick={(event) => {
+          onClick={event => {
             event.stopPropagation();
             // props.setMenuItem(props.menuItem);
             props.handleDeleteMenuItem();

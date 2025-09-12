@@ -33,7 +33,7 @@ export const ConfirmationModal = (props: ConfirmationModalProps) => {
       .then(() => {
         console.log("success");
       })
-      .catch((error) => console.log(error))
+      .catch(error => console.log(error))
       .finally(() => props.handleClose());
   };
   return (

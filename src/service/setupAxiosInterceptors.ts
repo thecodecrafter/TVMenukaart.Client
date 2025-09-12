@@ -1,5 +1,5 @@
-import api from "./api";
 import { UserDomainModel } from "../domain/UserDomainModel";
+import api from "./api";
 
 let isInterceptorSet = false;
 
@@ -12,7 +12,7 @@ export const setupInterceptors = (context: {
   if (isInterceptorSet) return;
   isInterceptorSet = true;
 
-  api.interceptors.request.use((config) => {
+  api.interceptors.request.use(config => {
     console.log("[Interceptor request] Request triggered:", config.url);
     const token = context.getToken();
 
@@ -23,11 +23,11 @@ export const setupInterceptors = (context: {
   });
 
   api.interceptors.response.use(
-    (response) => {
+    response => {
       console.log("[Interceptor] Request triggered:", response);
       return response;
     },
-    async (error) => {
+    async error => {
       console.log("[Interceptor response] Error in response occurred");
       const originalRequest = error.config as typeof error.config & {
         _retry?: boolean;

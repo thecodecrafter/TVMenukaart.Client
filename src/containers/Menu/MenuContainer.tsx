@@ -1,11 +1,12 @@
-import { MenuService } from "../../service/MenuService";
-import { useApiEndpointContext } from "../../context/useApiEndpointContext";
-import { Loader } from "../../components/Loader";
-import { useFetch } from "../../hooks/useFetch";
-import Connector from "../../signalr-connection";
 import { useState } from "react";
-import IconClose from "../../icons/IconClose";
+
 import { ConfirmationModal } from "../../components/ConfirmationModal";
+import { Loader } from "../../components/Loader";
+import { useApiEndpointContext } from "../../context/useApiEndpointContext";
+import { useFetch } from "../../hooks/useFetch";
+import IconClose from "../../icons/IconClose";
+import { MenuService } from "../../service/MenuService";
+import Connector from "../../signalr-connection";
 
 export const MenuContainer = () => {
   const apiUrl = useApiEndpointContext();
@@ -63,7 +64,7 @@ export const MenuContainer = () => {
         handleClose={() => setShowModal(false)}
         dialogId={menuId.toString()}
       />
-      {result.data?.map((item) => (
+      {result.data?.map(item => (
         <div key={item.id} className="mb-5 mr-5 flex-[0_1_200px]">
           <button
             className="indicator-item p-2 rounded-full bg-[#09244B] cursor-pointer group-hover:block hidden"

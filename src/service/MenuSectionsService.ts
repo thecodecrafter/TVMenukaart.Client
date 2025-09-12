@@ -1,11 +1,10 @@
-import axios from "../service/api";
-
 import {
   IMenuSectionClient,
   MenuSectionClient,
 } from "../client/MenuMaster.Client.Generated";
 import { MenuSectionDomainModel } from "../domain/MenuSectionDomainModel";
 import { MenuSectionMapper } from "../mapper/MenuSectionMapper";
+import axios from "../service/api";
 
 export class MenuSectionsService {
   private readonly client: IMenuSectionClient;
@@ -33,10 +32,10 @@ export class MenuSectionsService {
 
     return this.client
       .admin(id)
-      .then((result) => {
-        return result.map((item) => mapper.map(item));
+      .then(result => {
+        return result.map(item => mapper.map(item));
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
         throw new Error(error);
       });
@@ -52,10 +51,10 @@ export class MenuSectionsService {
 
     return this.client
       .menuSectionPOST(menuId, sectionName)
-      .then((response) => {
+      .then(response => {
         return menuSectionMapper.map(response);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
         throw new Error(error);
       });
@@ -68,17 +67,17 @@ export class MenuSectionsService {
   ): Promise<MenuSectionDomainModel> => {
     return this.client
       .menuSectionPATCH(menuId, id, name)
-      .then((response) => {
+      .then(response => {
         return new MenuSectionMapper().map(response);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
         throw new Error(error);
       });
   };
 
   deleteMenuSection = (id: number): Promise<void> => {
-    return this.client.menuSectionDELETE(id).catch((error) => {
+    return this.client.menuSectionDELETE(id).catch(error => {
       console.log(error);
     });
   };

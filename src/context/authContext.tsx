@@ -5,8 +5,10 @@ import {
   useLayoutEffect,
   useState,
 } from "react";
-import api from "../service/api";
+
 import { AccountService } from "../service/AccountService";
+import api from "../service/api";
+
 // import { UserDomainModel } from "../domain/UserDomainModel";
 
 interface AuthContextProps {
@@ -49,7 +51,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   useLayoutEffect(() => {
-    const authInterceptor = api.interceptors.request.use((config) => {
+    const authInterceptor = api.interceptors.request.use(config => {
       console.log("[Interceptor request] Request triggered:", config.url);
 
       const originalRequest = config as typeof config & {
@@ -73,8 +75,8 @@ export const AuthProvider = ({ children }) => {
 
   useLayoutEffect(() => {
     const refreshInterceptor = api.interceptors.response.use(
-      (response) => response,
-      async (error) => {
+      response => response,
+      async error => {
         console.log("[Interceptor response] Response:", error.url);
         const originalRequest = error.config as typeof error.config & {
           _retry?: boolean;

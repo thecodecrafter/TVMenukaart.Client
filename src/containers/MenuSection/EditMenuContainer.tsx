@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
+import { Loader } from "../../components/Loader";
 import { useApiEndpointContext } from "../../context/useApiEndpointContext";
 import { useFetch } from "../../hooks/useFetch";
 import { MenuService } from "../../service/MenuService";
-import { Loader } from "../../components/Loader";
 
 type EditMenuContainerProps = {
   menuId: number;
@@ -40,12 +40,12 @@ export const EditMenuContainer = (props: EditMenuContainerProps) => {
         reset();
         navigate(-1);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   };
 
   if (result.isProcessing) {
-      return <Loader />;
-    }
+    return <Loader />;
+  }
 
   return (
     <div className="py-8 px-4 mx-auto max-w-2xl lg:py-16">
